@@ -12,6 +12,12 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 
+const protect = require('./middleware/authMiddleware');
+
+app.get('/api/protected', protect, (req, res) => {
+  res.json({ message: 'You are logged in', userId: req.user.id });
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'FitRight API is running' });
 });
