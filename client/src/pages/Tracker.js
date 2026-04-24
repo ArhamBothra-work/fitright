@@ -1,61 +1,92 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
-const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const API = 'http://localhost:5000/api';
 
-function Tracker() {
+function getToken() {
+  return localStorage.getItem('token');
+}
+
+function authHeaders() {
+  const token = getToken();
+  return { 
+    headers: { 
+      Authorization: `Bearer ${token}` 
+    } 
+  };
+}
+
+export default function Tracker() {
   const [activeTab, setActiveTab] = useState('weight');
-  const [weightLog, setWeightLog] = useState(() => JSON.parse(localStorage.getItem('weightLog') || '[]'));
-  const [workoutLog, setWorkoutLog] = useState(() => JSON.parse(localStorage.getItem('workoutLog') || '[]'));
-  const [nutritionLog, setNutritionLog] = useState(() => JSON.parse(localStorage.getItem('nutritionLog') || '[]'));
+  const [weightLog, setWeightLog] = useState([]);
+  const [workoutLog, setWorkoutLog] = useState([]);
+  const [nutritionLog, setNutritionLog] = useState([]);
   const [weightForm, setWeightForm] = useState({ date: '', weight: '' });
   const [workoutForm, setWorkoutForm] = useState({ date: '', exercise: '', sets: '', reps: '', weight: '' });
   const [nutritionForm, setNutritionForm] = useState({ date: '', calories: '', protein: '' });
+  const [loading, setLoading] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  useEffect(() => { fetchAll(); }, []);
 
-  const saveWeight = (e) => {
-    e.preventDefault();
-    const updated = [...weightLog, { ...weightForm, id: Date.now() }].sort((a, b) => new Date(a.date) - new Date(b.date));
-    setWeightLog(updated);
-    localStorage.setItem('weightLog', JSON.stringify(updated));
-    setWeightForm({ date: '', weight: '' });
+  const fetchAll = async () => {
+    try {
+      const [w, wo, n] = await Promise.all([
+        axios.get(`${API}/logs/weight`, authHeaders()),
+        axios.get(`${API}/logs/workout`, authHeaders()),
+        axios.get(`${API}/logs/nutrition`, authHeaders()),
+      ]);
+      setWeightLog(w.data);
+      setWorkoutLog(wo.data);
+      setNutritionLog(n.data);
+    } catch (err) { console.error(err); }
   };
 
-  const saveWorkout = (e) => {
-    e.preventDefault();
-    const updated = [...workoutLog, { ...workoutForm, id: Date.now() }];
-    setWorkoutLog(updated);
-    localStorage.setItem('workoutLog', JSON.stringify(updated));
-    setWorkoutForm({ date: '', exercise: '', sets: '', reps: '', weight: '' });
+  const saveWeight = async (e) => {
+    e.preventDefault(); setLoading(true);
+    try {
+      const res = await axios.post(`${API}/logs/weight`, weightForm, authHeaders());
+      setWeightLog(prev => [...prev, res.data].sort((a, b) => new Date(a.date) - new Date(b.date)));
+      setWeightForm({ date: '', weight: '' });
+    } catch (err) { console.error(err); }
+    setLoading(false);
   };
 
-  const saveNutrition = (e) => {
-    e.preventDefault();
-    const updated = [...nutritionLog, { ...nutritionForm, id: Date.now() }];
-    setNutritionLog(updated);
-    localStorage.setItem('nutritionLog', JSON.stringify(updated));
-    setNutritionForm({ date: '', calories: '', protein: '' });
+  const saveWorkout = async (e) => {
+    e.preventDefault(); setLoading(true);
+    try {
+      const res = await axios.post(`${API}/logs/workout`, workoutForm, authHeaders());
+      setWorkoutLog(prev => [res.data, ...prev]);
+      setWorkoutForm({ date: '', exercise: '', sets: '', reps: '', weight: '' });
+    } catch (err) { console.error(err); }
+    setLoading(false);
+  };
+
+  const saveNutrition = async (e) => {
+    e.preventDefault(); setLoading(true);
+    try {
+      const res = await axios.post(`${API}/logs/nutrition`, nutritionForm, authHeaders());
+      setNutritionLog(prev => [res.data, ...prev]);
+      setNutritionForm({ date: '', calories: '', protein: '' });
+    } catch (err) { console.error(err); }
+    setLoading(false);
   };
 
   const inputStyle = {
     background: 'transparent', border: '0.5px solid rgba(255,255,255,0.12)',
     color: 'var(--fg)', padding: '0.75rem 1rem', fontSize: 13,
-    outline: 'none', fontFamily: 'Inter, sans-serif', width: '100%'
+    outline: 'none', fontFamily: 'Inter, sans-serif', width: '100%',
   };
 
   const labelStyle = {
     fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase',
-    color: 'var(--fg-dim)', display: 'block', marginBottom: '0.4rem'
+    color: 'var(--fg-dim)', display: 'block', marginBottom: '0.4rem',
   };
 
-  const tabs = ['weight', 'workout', 'nutrition'];
-
-  const maxWeight = weightLog.length ? Math.max(...weightLog.map(w => parseFloat(w.weight))) : 100;
-  const minWeight = weightLog.length ? Math.min(...weightLog.map(w => parseFloat(w.weight))) : 0;
-  const weightRange = maxWeight - minWeight || 1;
+  const minW = weightLog.length ? Math.min(...weightLog.map(w => parseFloat(w.weight))) : 0;
+  const maxW = weightLog.length ? Math.max(...weightLog.map(w => parseFloat(w.weight))) : 100;
+  const range = maxW - minW || 1;
 
   return (
     <div className="page">
@@ -69,19 +100,19 @@ function Tracker() {
             <span style={{ color: 'var(--fg)', display: 'block' }}>your work.</span>
           </h1>
           <p style={{ fontSize: 13, color: 'var(--fg-muted)', maxWidth: 400, lineHeight: 1.8, marginTop: '1rem' }}>
-            Log your weight, workouts, and nutrition. Watch the data show you exactly how far you've come.
+            Every log saved to your account. Your data, your progress, your proof.
           </p>
         </motion.div>
       </section>
 
       <div style={{ display: 'flex', borderBottom: '0.5px solid var(--border)' }}>
-        {tabs.map(tab => (
+        {['weight', 'workout', 'nutrition'].map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: '1rem 2rem', fontSize: 11, letterSpacing: '0.15em',
             textTransform: 'uppercase', background: 'transparent',
             color: activeTab === tab ? 'var(--acc)' : 'var(--fg-dim)',
             border: 'none', borderBottom: activeTab === tab ? '1px solid var(--acc)' : '1px solid transparent',
-            transition: 'all 0.2s', marginBottom: '-0.5px'
+            transition: 'all 0.2s', marginBottom: '-0.5px',
           }}>{tab}</button>
         ))}
       </div>
@@ -101,7 +132,9 @@ function Tracker() {
                 <label style={labelStyle}>Weight (kg)</label>
                 <input type="number" step="0.1" placeholder="75.5" style={inputStyle} value={weightForm.weight} onChange={e => setWeightForm({ ...weightForm, weight: e.target.value })} required />
               </div>
-              <button type="submit" style={{ background: 'var(--acc)', color: 'var(--fg)', border: 'none', padding: '0.85rem', fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Log weight →</button>
+              <button type="submit" disabled={loading} style={{ background: 'var(--acc)', color: 'var(--fg)', border: 'none', padding: '0.85rem', fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: loading ? 0.6 : 1 }}>
+                {loading ? 'Saving...' : 'Log weight →'}
+              </button>
             </motion.form>
           )}
 
@@ -131,7 +164,9 @@ function Tracker() {
                   <input type="number" placeholder="80" style={inputStyle} value={workoutForm.weight} onChange={e => setWorkoutForm({ ...workoutForm, weight: e.target.value })} required />
                 </div>
               </div>
-              <button type="submit" style={{ background: 'var(--acc)', color: 'var(--fg)', border: 'none', padding: '0.85rem', fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Log workout →</button>
+              <button type="submit" disabled={loading} style={{ background: 'var(--acc)', color: 'var(--fg)', border: 'none', padding: '0.85rem', fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: loading ? 0.6 : 1 }}>
+                {loading ? 'Saving...' : 'Log workout →'}
+              </button>
             </motion.form>
           )}
 
@@ -151,7 +186,9 @@ function Tracker() {
                 <label style={labelStyle}>Protein (g)</label>
                 <input type="number" placeholder="150" style={inputStyle} value={nutritionForm.protein} onChange={e => setNutritionForm({ ...nutritionForm, protein: e.target.value })} required />
               </div>
-              <button type="submit" style={{ background: 'var(--acc)', color: 'var(--fg)', border: 'none', padding: '0.85rem', fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Log nutrition →</button>
+              <button type="submit" disabled={loading} style={{ background: 'var(--acc)', color: 'var(--fg)', border: 'none', padding: '0.85rem', fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: loading ? 0.6 : 1 }}>
+                {loading ? 'Saving...' : 'Log nutrition →'}
+              </button>
             </motion.form>
           )}
         </div>
@@ -168,7 +205,7 @@ function Tracker() {
                     {[
                       { label: 'Starting', value: `${weightLog[0]?.weight} kg` },
                       { label: 'Current', value: `${weightLog[weightLog.length - 1]?.weight} kg` },
-                      { label: 'Change', value: `${(parseFloat(weightLog[weightLog.length - 1]?.weight) - parseFloat(weightLog[0]?.weight)).toFixed(1)} kg` }
+                      { label: 'Change', value: `${(parseFloat(weightLog[weightLog.length - 1]?.weight) - parseFloat(weightLog[0]?.weight)).toFixed(1)} kg` },
                     ].map((s, i) => (
                       <div key={i} style={{ flex: 1, padding: '1rem', background: 'rgba(255,255,255,0.02)', border: '0.5px solid var(--border)' }}>
                         <div style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--fg-dim)', marginBottom: '0.4rem' }}>{s.label}</div>
@@ -176,18 +213,15 @@ function Tracker() {
                       </div>
                     ))}
                   </div>
-
-                  <div style={{ position: 'relative', height: 200, marginBottom: '1rem' }}>
-                    <svg width="100%" height="100%" viewBox={`0 0 ${Math.max(weightLog.length * 60, 400)} 200`} preserveAspectRatio="none">
-                      <polyline
-                        fill="none" stroke="var(--acc)" strokeWidth="2"
-                        points={weightLog.map((w, i) => `${i * 60 + 30},${180 - ((parseFloat(w.weight) - minWeight) / weightRange) * 150}`).join(' ')}
-                      />
+                  <div style={{ position: 'relative', height: 200, overflowX: 'auto' }}>
+                    <svg width={Math.max(weightLog.length * 60, 400)} height="200">
+                      <polyline fill="none" stroke="var(--acc)" strokeWidth="2"
+                        points={weightLog.map((w, i) => `${i * 60 + 30},${180 - ((parseFloat(w.weight) - minW) / range) * 150}`).join(' ')} />
                       {weightLog.map((w, i) => (
                         <g key={i}>
-                          <circle cx={i * 60 + 30} cy={180 - ((parseFloat(w.weight) - minWeight) / weightRange) * 150} r="4" fill="var(--acc)" />
+                          <circle cx={i * 60 + 30} cy={180 - ((parseFloat(w.weight) - minW) / range) * 150} r="4" fill="var(--acc)" />
                           <text x={i * 60 + 30} y="198" textAnchor="middle" fill="rgba(240,237,232,0.3)" fontSize="9">{w.date?.slice(5)}</text>
-                          <text x={i * 60 + 30} y={170 - ((parseFloat(w.weight) - minWeight) / weightRange) * 150} textAnchor="middle" fill="rgba(240,237,232,0.6)" fontSize="10">{w.weight}</text>
+                          <text x={i * 60 + 30} y={168 - ((parseFloat(w.weight) - minW) / range) * 150} textAnchor="middle" fill="rgba(240,237,232,0.6)" fontSize="10">{w.weight}</text>
                         </g>
                       ))}
                     </svg>
@@ -204,8 +238,8 @@ function Tracker() {
                 <div style={{ fontSize: 13, color: 'var(--fg-dim)', padding: '3rem 0' }}>No workouts logged yet.</div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5px', background: 'var(--border)' }}>
-                  {[...workoutLog].reverse().map((w, i) => (
-                    <div key={w.id} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 60px 60px 70px', gap: '1rem', alignItems: 'center', padding: '1rem 1.25rem', background: 'var(--bg)' }}>
+                  {workoutLog.map((w) => (
+                    <div key={w._id} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 60px 60px 70px', gap: '1rem', alignItems: 'center', padding: '1rem 1.25rem', background: 'var(--bg)' }}>
                       <div style={{ fontSize: 11, color: 'var(--fg-dim)' }}>{w.date}</div>
                       <div style={{ fontSize: 13, fontWeight: 600 }}>{w.exercise}</div>
                       <div style={{ textAlign: 'center' }}>
@@ -234,8 +268,8 @@ function Tracker() {
                 <div style={{ fontSize: 13, color: 'var(--fg-dim)', padding: '3rem 0' }}>No nutrition logged yet.</div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5px', background: 'var(--border)' }}>
-                  {[...nutritionLog].reverse().map((n, i) => (
-                    <div key={n.id} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '1rem', alignItems: 'center', padding: '1rem 1.25rem', background: 'var(--bg)' }}>
+                  {nutritionLog.map((n) => (
+                    <div key={n._id} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '1rem', alignItems: 'center', padding: '1rem 1.25rem', background: 'var(--bg)' }}>
                       <div style={{ fontSize: 11, color: 'var(--fg-dim)' }}>{n.date}</div>
                       <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--acc)' }}>{n.calories}</div>
@@ -256,5 +290,3 @@ function Tracker() {
     </div>
   );
 }
-
-export default Tracker;

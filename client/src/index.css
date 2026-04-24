@@ -55,3 +55,9 @@ button {
   background: var(--bg);
   color: var(--fg);
 }
+
+/* fix transparent stroked text */
+[style*="color: transparent"] {
+  color: #ffffff !important;
+  -webkit-text-stroke: 0px !important;
+}
