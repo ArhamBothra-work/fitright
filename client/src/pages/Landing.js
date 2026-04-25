@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, useInView, animate } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import Navbar from '../components/Navbar';
 
 /* ── tiny hook: element in view with margin control ── */
@@ -87,21 +87,6 @@ function MisCounter() {
 }
 
 /* ── Clip-wipe text reveal ── */
-function WipeText({ children, delay = 0, style = {} }) {
-  const ref = useRef(null);
-  const inView = useReveal(ref, 0.3);
-  return (
-    <div ref={ref} style={{ overflow: 'hidden', ...style }}>
-      <motion.div
-        initial={{ y: '105%' }}
-        animate={inView ? { y: 0 } : { y: '105%' }}
-        transition={{ duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-}
 
 /* ── Slide reveal (left or right) ── */
 function SlideIn({ children, from = 'left', delay = 0, style = {} }) {
@@ -164,7 +149,6 @@ function ProgressBar({ value, label, delay = 0 }) {
 export default function Landing() {
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
-  const intentRef = useRef(null);
   const { scrollY } = useScroll();
 
   /* parallax for hero title */
