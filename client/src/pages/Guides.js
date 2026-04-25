@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 
-const API = 'http://localhost:5000/api';
+const API = 'https://fitright-server.onrender.com/api';
 const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
 const categoryOrder = ['Nutrition', 'Training', 'Myth Busting', 'Recovery'];

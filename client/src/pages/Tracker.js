@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
-const API = 'http://localhost:5000/api';
+const API = 'https://fitright-server.onrender.com/api';
 
 function getToken() {
   return localStorage.getItem('token');

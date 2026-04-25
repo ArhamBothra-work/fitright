@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 
-const API = 'http://localhost:5000/api';
+const API = 'https://fitright-server.onrender.com/api';
 const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
 const musclePositions = {
