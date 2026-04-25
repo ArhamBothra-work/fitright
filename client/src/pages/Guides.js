@@ -1,59 +1,43 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
 
-const categories = [
-  {
-    id: 'nutrition',
-    n: '01',
-    title: 'Nutrition',
-    desc: 'Calories, protein, macros — understand what you eat and why it matters.',
-    guides: [
-      { id: 'calories-explained', title: 'Calories explained', sub: 'What they are and why they matter' },
-      { id: 'protein-guide', title: 'The protein guide', sub: 'How much, when, and why' },
-      { id: 'macros-101', title: 'Macros 101', sub: 'Carbs, fats, protein broken down' },
-      { id: 'fat-loss-diet', title: 'Fat loss nutrition', sub: 'Eating in a deficit the right way' },
-    ]
-  },
-  {
-    id: 'training',
-    n: '02',
-    title: 'Training',
-    desc: 'How to structure your workouts, build strength, and actually progress.',
-    guides: [
-      { id: 'progressive-overload', title: 'Progressive overload', sub: 'The single most important training concept' },
-      { id: 'workout-splits', title: 'Workout splits explained', sub: 'PPL, Upper/Lower, Full body — which is best' },
-      { id: 'compound-movements', title: 'Compound movements', sub: 'The big lifts and why they matter' },
-      { id: 'recovery-guide', title: 'Recovery & rest', sub: 'Why rest days are part of the plan' },
-    ]
-  },
-  {
-    id: 'myths',
-    n: '03',
-    title: 'Myth busting',
-    desc: 'The fitness industry is full of lies. We fix that here.',
-    guides: [
-      { id: 'cardio-myth', title: 'Cardio doesn\'t burn fat', sub: 'What actually causes fat loss' },
-      { id: 'lifting-myth', title: 'Lifting makes you bulky', sub: 'Why this is completely wrong' },
-      { id: 'spot-reduction', title: 'Spot reduction is fake', sub: 'You can\'t choose where fat comes from' },
-      { id: 'starvation-mode', title: 'Starvation mode myth', sub: 'The truth about extreme deficits' },
-    ]
-  },
-  {
-    id: 'recovery',
-    n: '04',
-    title: 'Recovery',
-    desc: 'Sleep, stress, and everything your body needs outside the gym.',
-    guides: [
-      { id: 'sleep-gains', title: 'Sleep and muscle growth', sub: 'Why 8 hours is non-negotiable' },
-      { id: 'stress-cortisol', title: 'Stress and cortisol', sub: 'How stress kills your progress' },
-      { id: 'deload-week', title: 'Deload weeks', sub: 'When and why to train less' },
-      { id: 'supplements-basics', title: 'Supplements basics', sub: 'What actually works and what doesn\'t' },
-    ]
-  }
-];
+const API = 'http://localhost:5000/api';
+const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
-function Guides() {
+const categoryOrder = ['Nutrition', 'Training', 'Myth Busting', 'Recovery'];
+const categoryNums = { 'Nutrition': '01', 'Training': '02', 'Myth Busting': '03', 'Recovery': '04' };
+const categoryDescs = {
+  'Nutrition': 'Calories, protein, macros — understand what you eat and why it matters.',
+  'Training': 'How to structure your workouts, build strength, and actually progress.',
+  'Myth Busting': 'The fitness industry is full of lies. We fix that here.',
+  'Recovery': 'Sleep, stress, and everything your body needs outside the gym.',
+};
+
+export default function Guides() {
+  const [guides, setGuides] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`${API}/guides`, authHeaders())
+      .then(res => { setGuides(res.data); setLoading(false); })
+      .catch(err => { console.error(err); setLoading(false); });
+  }, []);
+
+  const grouped = categoryOrder.map(cat => ({
+    category: cat,
+    guides: guides.filter(g => g.category === cat),
+  }));
+
+  if (loading) return (
+    <div className="page">
+      <Navbar />
+      <div style={{ padding: '4rem 2.5rem', fontSize: 13, color: 'var(--fg-muted)' }}>Loading guides...</div>
+    </div>
+  );
+
   return (
     <div className="page">
       <Navbar />
@@ -72,29 +56,27 @@ function Guides() {
       </section>
 
       <div>
-        {categories.map((cat, ci) => (
-          <motion.div key={cat.id}
+        {grouped.map((cat, ci) => (
+          <motion.div key={cat.category}
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: ci * 0.05 }}
             style={{ borderBottom: '0.5px solid var(--border)' }}>
-
             <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', borderBottom: '0.5px solid var(--border)' }}>
               <div style={{ padding: '2rem 2.5rem', borderRight: '0.5px solid var(--border)' }}>
-                <div style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--acc)', marginBottom: '0.75rem', fontWeight: 700 }}>{cat.n} ⚡</div>
-                <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{cat.title}</div>
-                <div style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.7 }}>{cat.desc}</div>
+                <div style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--acc)', marginBottom: '0.75rem', fontWeight: 700 }}>{categoryNums[cat.category]} ⚡</div>
+                <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{cat.category}</div>
+                <div style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.7 }}>{categoryDescs[cat.category]}</div>
               </div>
-
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
                 {cat.guides.map((guide, gi) => (
-                  <Link to={`/guides/${guide.id}`} key={guide.id}>
+                  <Link to={`/guides/${guide.slug}`} key={guide.slug}>
                     <motion.div
                       whileHover={{ background: '#0f0f0f' }}
                       style={{
                         padding: '1.75rem 2rem',
                         borderRight: gi % 2 === 0 ? '0.5px solid var(--border)' : 'none',
-                        borderBottom: gi < 2 ? '0.5px solid var(--border)' : 'none',
-                        transition: 'background 0.2s', position: 'relative', cursor: 'none'
+                        borderBottom: gi < cat.guides.length - 2 ? '0.5px solid var(--border)' : 'none',
+                        transition: 'background 0.2s', position: 'relative', cursor: 'none',
                       }}>
                       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: '0.4rem' }}>{guide.title}</div>
                       <div style={{ fontSize: 12, color: 'var(--fg-muted)' }}>{guide.sub}</div>
@@ -110,5 +92,3 @@ function Guides() {
     </div>
   );
 }
-
-export default Guides;

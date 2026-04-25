@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const logRoutes = require('./routes/logs');
+const guideRoutes = require('./routes/guides');
+const planRoutes = require('./routes/plans');
 
 dotenv.config();
 
@@ -13,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/logs', logRoutes);
+app.use('/api/guides', guideRoutes);
+app.use('/api/plans', planRoutes);
 
 const protect = require('./middleware/authMiddleware');
 
