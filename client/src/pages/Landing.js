@@ -52,7 +52,7 @@ function MisCounter() {
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: 'clamp(72px,10vw,120px)',
           lineHeight: 1,
-          color: val === 0 ? 'rgba(237,232,225,0.12)' : `rgb(${Math.round(200 + val * 0.3)},${Math.round(56 - val * 0.2)},${Math.round(42 - val * 0.1)})`,
+          color: val === 0 ? 'rgba(255,255,255,0.15)' : `rgb(${Math.round(200 + val * 0.3)},${Math.round(56 - val * 0.2)},${Math.round(42 - val * 0.1)})`,
           transition: 'color 0.1s',
           letterSpacing: '-0.02em',
         }}>
@@ -63,7 +63,7 @@ function MisCounter() {
           fontSize: 10,
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
-          color: 'rgba(237,232,225,0.25)',
+          color: '#ffffff',
           marginTop: '0.4rem',
         }}>misinformation</div>
       </motion.div>
@@ -75,7 +75,7 @@ function MisCounter() {
           position: 'absolute', top: 0, left: 0,
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: 'clamp(20px,3vw,32px)',
-          color: 'rgba(237,232,225,0.6)',
+          color: '#ffffff',
           paddingTop: '1rem',
           pointerEvents: 'none',
         }}
@@ -85,8 +85,6 @@ function MisCounter() {
     </div>
   );
 }
-
-/* ── Clip-wipe text reveal ── */
 
 /* ── Slide reveal (left or right) ── */
 function SlideIn({ children, from = 'left', delay = 0, style = {} }) {
@@ -130,10 +128,10 @@ function ProgressBar({ value, label, delay = 0 }) {
   return (
     <div ref={ref} style={{ marginBottom: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.3)' }}>{label}</span>
-        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, letterSpacing: '0.1em', color: 'rgba(237,232,225,0.3)' }}>{value}%</span>
+        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#ffffff' }}>{label}</span>
+        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, letterSpacing: '0.1em', color: '#ffffff' }}>{value}%</span>
       </div>
-      <div style={{ height: 2, background: 'rgba(237,232,225,0.07)', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ height: 2, background: 'rgba(255,255,255,0.15)', position: 'relative', overflow: 'hidden' }}>
         <motion.div
           initial={{ width: 0 }}
           animate={inView ? { width: `${value}%` } : { width: 0 }}
@@ -233,8 +231,8 @@ export default function Landing() {
     mono: { fontFamily: "'Space Mono',monospace" },
     bebas: { fontFamily: "'Bebas Neue',sans-serif" },
     acc: { color: '#e84030' },
-    dim: { color: 'rgba(237,232,225,0.12)', WebkitTextStroke: '1px rgba(237,232,225,0.15)' },
-    border: { borderColor: 'rgba(237,232,225,0.07)' },
+    dim: { color: 'rgba(255,255,255,0.2)', WebkitTextStroke: '1px rgba(255,255,255,0.2)' },
+    border: { borderColor: 'rgba(255,255,255,0.15)' },
   };
 
   return (
@@ -256,18 +254,18 @@ export default function Landing() {
               style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.5rem' }}
             >
               <div style={{ width: 28, height: 0.5, background: '#e84030' }} />
-              <span style={{ ...s.mono, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.25)' }}>
+              <span style={{ ...s.mono, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#ffffff' }}>
                 fitness education & tracking — est. 2026
               </span>
             </motion.div>
 
             <div style={{ overflow: 'hidden', marginBottom: '0.1rem' }}>
               <motion.div initial={{ y: '110%' }} animate={{ y: 0 }} transition={{ delay: 0.08, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                style={{ ...s.bebas, fontSize: 'clamp(80px,14vw,180px)', lineHeight: 0.88, textTransform: 'uppercase', WebkitTextStroke: '1.5px rgba(237,232,225,0.16)', color: 'transparent' }}>Know</motion.div>
+                style={{ ...s.bebas, fontSize: 'clamp(80px,14vw,180px)', lineHeight: 0.88, textTransform: 'uppercase', color: '#ffffff' }}>Know</motion.div>
             </div>
             <div style={{ overflow: 'hidden', marginBottom: '0.1rem' }}>
               <motion.div initial={{ y: '110%' }} animate={{ y: 0 }} transition={{ delay: 0.18, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                style={{ ...s.bebas, fontSize: 'clamp(80px,14vw,180px)', lineHeight: 0.88, textTransform: 'uppercase', WebkitTextStroke: '1.5px rgba(237,232,225,0.11)', color: 'transparent' }}>Your</motion.div>
+                style={{ ...s.bebas, fontSize: 'clamp(80px,14vw,180px)', lineHeight: 0.88, textTransform: 'uppercase', color: '#ffffff' }}>Your</motion.div>
             </div>
             <div style={{ overflow: 'hidden', marginBottom: '3rem' }}>
               <motion.div initial={{ y: '110%' }} animate={{ y: 0 }} transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -278,7 +276,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }}
               style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1.5rem' }}
             >
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: 'rgba(237,232,225,0.38)', maxWidth: 280, lineHeight: 1.85, fontWeight: 300 }}>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: '#ffffff', maxWidth: 280, lineHeight: 1.85, fontWeight: 300 }}>
                 No myths. No confusion. Science-backed knowledge, structured plans, and tools to prove your work.
               </p>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -289,41 +287,43 @@ export default function Landing() {
                     Start now
                   </motion.button>
                 </Link>
-                <motion.button
-                  whileHover={{ borderColor: 'rgba(237,232,225,0.25)', color: '#ede8e1' }}
-                  style={{ ...s.mono, background: 'transparent', color: 'rgba(237,232,225,0.35)', border: '0.5px solid rgba(237,232,225,0.08)', padding: '1rem 2rem', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.2s' }}>
-                  Explore
-                </motion.button>
+                <Link to="/guides">
+                  <motion.button
+                    whileHover={{ borderColor: 'rgba(255,255,255,0.6)', color: '#ffffff' }}
+                    style={{ ...s.mono, background: 'transparent', color: '#ffffff', border: '0.5px solid rgba(255,255,255,0.4)', padding: '1rem 2rem', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.2s' }}>
+                    Explore
+                  </motion.button>
+                </Link>
               </div>
             </motion.div>
           </motion.div>
         </section>
 
         {/* ── MARQUEE 1 ── */}
-        <div style={{ borderTop: '0.5px solid rgba(237,232,225,0.07)', borderBottom: '0.5px solid rgba(237,232,225,0.07)', overflow: 'hidden', padding: '0.6rem 0' }}>
+        <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.15)', borderBottom: '0.5px solid rgba(255,255,255,0.15)', overflow: 'hidden', padding: '0.6rem 0' }}>
           <div style={{ display: 'flex', width: 'max-content', animation: 'marquee 28s linear infinite' }}>
             {[...marqueeItems, ...marqueeItems].map((item, i) => (
-              <span key={i} style={{ ...s.mono, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.includes('⚡') ? 'rgba(200,56,42,0.7)' : 'rgba(237,232,225,0.15)', padding: '0 2.5rem', borderRight: '0.5px solid rgba(237,232,225,0.07)', whiteSpace: 'nowrap' }}>{item}</span>
+              <span key={i} style={{ ...s.mono, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.includes('⚡') ? 'rgba(200,56,42,0.9)' : '#ffffff', padding: '0 2.5rem', borderRight: '0.5px solid rgba(255,255,255,0.15)', whiteSpace: 'nowrap' }}>{item}</span>
             ))}
           </div>
         </div>
 
         {/* ── TRAIN WITH INTENT — cinematic ── */}
-        <section style={{ padding: '10rem 3rem', borderTop: '0.5px solid rgba(237,232,225,0.07)', overflow: 'hidden', position: 'relative' }}>
+        <section style={{ padding: '10rem 3rem', borderTop: '0.5px solid rgba(255,255,255,0.15)', overflow: 'hidden', position: 'relative' }}>
           <motion.div style={{ y: intentY, scale: intentScale }}>
             <ScaleIn>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ ...s.mono, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.2)', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+                <div style={{ ...s.mono, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#ffffff', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                   <div style={{ width: 20, height: 0.5, background: '#e84030' }} />
                   the only rule
                   <div style={{ width: 20, height: 0.5, background: '#e84030' }} />
                 </div>
                 <div style={{ ...s.bebas, fontSize: 'clamp(64px,13vw,160px)', lineHeight: 0.88, textTransform: 'uppercase', letterSpacing: '0.01em' }}>
-                  <div style={{ WebkitTextStroke: '1.5px rgba(237,232,225,0.1)', color: 'transparent' }}>Train</div>
-                  <div style={{ WebkitTextStroke: '1.5px rgba(237,232,225,0.07)', color: 'transparent' }}>with</div>
+                  <div style={{ color: '#ffffff' }}>Train</div>
+                  <div style={{ color: '#ffffff' }}>with</div>
                   <div style={{ color: '#e84030' }}>intent.</div>
                 </div>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: 'rgba(237,232,225,0.3)', maxWidth: 380, margin: '2.5rem auto 0', lineHeight: 1.85, fontWeight: 300 }}>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: '#ffffff', maxWidth: 380, margin: '2.5rem auto 0', lineHeight: 1.85, fontWeight: 300 }}>
                   Every rep. Every meal. Every number tracked. When you train with intent, the results are inevitable.
                 </p>
               </div>
@@ -332,7 +332,7 @@ export default function Landing() {
         </section>
 
         {/* ── CINEMATIC STATS (misinformation counter) ── */}
-        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(237,232,225,0.07)' }}>
+        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(255,255,255,0.15)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
             <SlideIn from="left">
               <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#e84030', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -340,31 +340,31 @@ export default function Landing() {
                 the problem
               </div>
               <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,80px)', lineHeight: 0.9, textTransform: 'uppercase', marginBottom: '2rem' }}>
-                <div style={{ WebkitTextStroke: '1px rgba(237,232,225,0.15)', color: 'transparent' }}>The internet</div>
-                <div style={{ WebkitTextStroke: '1px rgba(237,232,225,0.1)', color: 'transparent' }}>is full of</div>
+                <div style={{ color: '#ffffff' }}>The internet</div>
+                <div style={{ color: '#ffffff' }}>is full of</div>
                 <div style={{ color: '#e84030' }}>lies.</div>
               </div>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: 'rgba(237,232,225,0.35)', lineHeight: 1.85, maxWidth: 380, fontWeight: 300 }}>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: '#ffffff', lineHeight: 1.85, maxWidth: 380, fontWeight: 300 }}>
                 Fitness influencers, broscience, and bad advice have confused an entire generation. FitRight exists to fix that — with actual science, structured like a curriculum.
               </p>
             </SlideIn>
 
             <SlideIn from="right">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: 'rgba(237,232,225,0.07)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.15)' }}>
                 <div style={{ background: '#0e0e0e', padding: '2.5rem 2rem' }}>
                   <MisCounter />
                 </div>
                 <div style={{ background: '#0e0e0e', padding: '2.5rem 2rem' }}>
                   <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,72px)', lineHeight: 1, color: '#e84030' }}>3<span style={{ fontSize: '0.4em' }}>→1</span></div>
-                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.2)', marginTop: '0.5rem' }}>apps replaced</div>
+                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffffff', marginTop: '0.5rem' }}>apps replaced</div>
                 </div>
                 <div style={{ background: '#0e0e0e', padding: '2.5rem 2rem' }}>
                   <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,72px)', lineHeight: 1, color: '#e84030' }}>∞</div>
-                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.2)', marginTop: '0.5rem' }}>excuses eliminated</div>
+                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffffff', marginTop: '0.5rem' }}>excuses eliminated</div>
                 </div>
                 <div style={{ background: '#0e0e0e', padding: '2.5rem 2rem' }}>
                   <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,72px)', lineHeight: 1, color: '#e84030' }}>1<span style={{ fontSize: '0.4em' }}>st</span></div>
-                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.2)', marginTop: '0.5rem' }}>learn. then train.</div>
+                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffffff', marginTop: '0.5rem' }}>learn. then train.</div>
                 </div>
               </div>
             </SlideIn>
@@ -372,90 +372,94 @@ export default function Landing() {
         </section>
 
         {/* ── FEATURES ── */}
-        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(237,232,225,0.07)' }}>
+        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(255,255,255,0.15)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
             <SlideIn from="left">
-              <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,80px)', lineHeight: 0.9, textTransform: 'uppercase' }}>
+              <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,80px)', lineHeight: 0.9, textTransform: 'uppercase', color: '#ffffff' }}>
                 What's<br />inside.
               </div>
             </SlideIn>
             <SlideIn from="right">
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: 'rgba(237,232,225,0.35)', maxWidth: 260, lineHeight: 1.7, fontWeight: 300 }}>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: '#ffffff', maxWidth: 260, lineHeight: 1.7, fontWeight: 300 }}>
                 Everything you need to learn, plan, and track — in one place.
               </p>
             </SlideIn>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(237,232,225,0.07)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,0.15)' }}>
             {[
-              { n: '01', title: 'Education Hub', body: 'A full curriculum. Nutrition, training, recovery, myth busting — structured like a proper course, not a blog.' },
-              { n: '02', title: 'Workout Plans', body: 'Goal-based splits with an interactive body diagram that lights up exactly what every exercise hits.' },
-              { n: '03', title: 'Progress Tracker', body: 'Log bodyweight, nutrition, strength. Watch charts prove your consistency is working. Data doesn\'t lie.' },
+              { n: '01', title: 'Education Hub', body: 'A full curriculum. Nutrition, training, recovery, myth busting — structured like a proper course, not a blog.', to: '/guides' },
+              { n: '02', title: 'Workout Plans', body: 'Goal-based splits with an interactive body diagram that lights up exactly what every exercise hits.', to: '/plans' },
+              { n: '03', title: 'Progress Tracker', body: 'Log bodyweight, nutrition, strength. Watch charts prove your consistency is working. Data doesn\'t lie.', to: '/tracker' },
             ].map((f, i) => (
               <ScaleIn key={i} delay={i * 0.1}>
-                <motion.div
-                  whileHover={{ background: '#141414', y: -4, boxShadow: '0 20px 60px rgba(232,64,48,0.08)' }}
-                  style={{ background: '#0e0e0e', padding: '2.5rem 2rem', position: 'relative', transition: 'background 0.25s', cursor: 'none', height: '100%' }}
-                >
-                  <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.18em', color: '#e84030', marginBottom: '1.5rem' }}>{f.n} ⚡</div>
-                  <div style={{ ...s.bebas, fontSize: 28, textTransform: 'uppercase', marginBottom: '0.75rem', lineHeight: 1 }}>{f.title}</div>
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: 'rgba(237,232,225,0.35)', lineHeight: 1.7, fontWeight: 300 }}>{f.body}</p>
+                <Link to={f.to} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <motion.div
-                    whileHover={{ opacity: 1, x: 3, y: -3 }}
-                    style={{ position: 'absolute', top: '2rem', right: '2rem', fontSize: 16, color: '#e84030', opacity: 0.25, transition: 'opacity 0.2s' }}
-                  >↗</motion.div>
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileHover={{ width: '100%' }}
-                    style={{ position: 'absolute', bottom: 0, left: 0, height: 1, background: '#e84030' }}
-                    transition={{ duration: 0.4 }}
-                  />
-                </motion.div>
+                    whileHover={{ background: '#141414', y: -4, boxShadow: '0 20px 60px rgba(232,64,48,0.08)' }}
+                    style={{ background: '#0e0e0e', padding: '2.5rem 2rem', position: 'relative', transition: 'background 0.25s', cursor: 'none', height: '100%' }}
+                  >
+                    <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.18em', color: '#e84030', marginBottom: '1.5rem' }}>{f.n} ⚡</div>
+                    <div style={{ ...s.bebas, fontSize: 28, textTransform: 'uppercase', marginBottom: '0.75rem', lineHeight: 1, color: '#ffffff' }}>{f.title}</div>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: '#ffffff', lineHeight: 1.7, fontWeight: 300 }}>{f.body}</p>
+                    <motion.div
+                      whileHover={{ opacity: 1, x: 3, y: -3 }}
+                      style={{ position: 'absolute', top: '2rem', right: '2rem', fontSize: 16, color: '#e84030', opacity: 0.6, transition: 'opacity 0.2s' }}
+                    >↗</motion.div>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileHover={{ width: '100%' }}
+                      style={{ position: 'absolute', bottom: 0, left: 0, height: 1, background: '#e84030' }}
+                      transition={{ duration: 0.4 }}
+                    />
+                  </motion.div>
+                </Link>
               </ScaleIn>
             ))}
           </div>
         </section>
 
         {/* ── MARQUEE 2 reverse ── */}
-        <div style={{ borderTop: '0.5px solid rgba(237,232,225,0.07)', borderBottom: '0.5px solid rgba(237,232,225,0.07)', overflow: 'hidden', padding: '0.6rem 0' }}>
+        <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.15)', borderBottom: '0.5px solid rgba(255,255,255,0.15)', overflow: 'hidden', padding: '0.6rem 0' }}>
           <div style={{ display: 'flex', width: 'max-content', animation: 'marqueeR 24s linear infinite' }}>
             {['Calories 101', '⚡ Protein Guide', 'Workout Splits', '⚡ Compound Lifts', 'Recovery & Sleep', '⚡ Supplement Truth', 'Body Recomp', '⚡ Deload Weeks',
               'Calories 101', '⚡ Protein Guide', 'Workout Splits', '⚡ Compound Lifts', 'Recovery & Sleep', '⚡ Supplement Truth', 'Body Recomp', '⚡ Deload Weeks'].map((item, i) => (
-              <span key={i} style={{ ...s.mono, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.includes('⚡') ? 'rgba(200,56,42,0.7)' : 'rgba(237,232,225,0.15)', padding: '0 2.5rem', borderRight: '0.5px solid rgba(237,232,225,0.07)', whiteSpace: 'nowrap' }}>{item}</span>
+              <span key={i} style={{ ...s.mono, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.includes('⚡') ? 'rgba(200,56,42,0.9)' : '#ffffff', padding: '0 2.5rem', borderRight: '0.5px solid rgba(255,255,255,0.15)', whiteSpace: 'nowrap' }}>{item}</span>
             ))}
           </div>
         </div>
 
         {/* ── STORY STEPS ── */}
-        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(237,232,225,0.07)' }}>
+        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(255,255,255,0.15)' }}>
           <ScaleIn style={{ marginBottom: '5rem', textAlign: 'center' }}>
-            <div style={{ ...s.bebas, fontSize: 'clamp(40px,5.5vw,72px)', lineHeight: 0.92, textTransform: 'uppercase' }}>
-              <span style={{ WebkitTextStroke: '1px rgba(237,232,225,0.13)', color: 'transparent' }}>The </span>
+            <div style={{ ...s.bebas, fontSize: 'clamp(40px,5.5vw,72px)', lineHeight: 0.92, textTransform: 'uppercase', color: '#ffffff' }}>
+              <span>The </span>
               <span style={{ color: '#e84030' }}>right way</span>
               <br />
-              <span style={{ WebkitTextStroke: '1px rgba(237,232,225,0.13)', color: 'transparent' }}>to do </span>
+              <span>to do </span>
               fitness.
             </div>
           </ScaleIn>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'rgba(237,232,225,0.07)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'rgba(255,255,255,0.15)' }}>
             {[
-              { n: '01', title: 'Learn first', body: 'Start with the fundamentals. Understand calories, protein, and how your body actually builds muscle. Most people skip this step. That\'s why they fail.', tag: 'Education Hub →', from: 'left' },
-              { n: '02', title: 'Pick your plan', body: 'Choose a program built for your goal. Fat loss, muscle gain, maintenance — see exactly what muscles every exercise targets with our interactive body diagram.', tag: 'Workout Plans →', from: 'right' },
-              { n: '03', title: 'Log everything', body: 'Track bodyweight, strength, and nutrition daily. The data compounds. Over weeks and months you\'ll see exactly how far you\'ve come.', tag: 'Progress Tracker →', from: 'left' },
-              { n: '04', title: 'Prove your work', body: 'Watch the charts. See the numbers move. Strength up. Weight down. The plan works when you work the plan — and you\'ll have the data to prove it.', tag: 'Dashboard →', from: 'right' },
+              { n: '01', title: 'Learn first', body: 'Start with the fundamentals. Understand calories, protein, and how your body actually builds muscle. Most people skip this step. That\'s why they fail.', tag: 'Education Hub →', to: '/guides', from: 'left' },
+              { n: '02', title: 'Pick your plan', body: 'Choose a program built for your goal. Fat loss, muscle gain, maintenance — see exactly what muscles every exercise targets with our interactive body diagram.', tag: 'Workout Plans →', to: '/plans', from: 'right' },
+              { n: '03', title: 'Log everything', body: 'Track bodyweight, strength, and nutrition daily. The data compounds. Over weeks and months you\'ll see exactly how far you\'ve come.', tag: 'Progress Tracker →', to: '/tracker', from: 'left' },
+              { n: '04', title: 'Prove your work', body: 'Watch the charts. See the numbers move. Strength up. Weight down. The plan works when you work the plan — and you\'ll have the data to prove it.', tag: 'Dashboard →', to: '/dashboard', from: 'right' },
             ].map((step, i) => (
               <SlideIn key={i} from={step.from} delay={0}>
                 <div style={{ background: '#070707', display: 'grid', gridTemplateColumns: '80px 1fr 1fr', alignItems: 'stretch' }}>
-                  <div style={{ ...s.bebas, fontSize: 60, color: '#e84030', opacity: 0.15, padding: '2rem 1.5rem', display: 'flex', alignItems: 'flex-start', borderRight: '0.5px solid rgba(237,232,225,0.07)', lineHeight: 1 }}>{step.n}</div>
-                  <div style={{ padding: '2.5rem 3rem', borderRight: '0.5px solid rgba(237,232,225,0.07)' }}>
-                    <div style={{ ...s.bebas, fontSize: 30, textTransform: 'uppercase', marginBottom: '0.75rem' }}>{step.title}</div>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: 'rgba(237,232,225,0.35)', lineHeight: 1.75, fontWeight: 300, maxWidth: 380 }}>{step.body}</p>
+                  <div style={{ ...s.bebas, fontSize: 60, color: '#e84030', opacity: 0.25, padding: '2rem 1.5rem', display: 'flex', alignItems: 'flex-start', borderRight: '0.5px solid rgba(255,255,255,0.15)', lineHeight: 1 }}>{step.n}</div>
+                  <div style={{ padding: '2.5rem 3rem', borderRight: '0.5px solid rgba(255,255,255,0.15)' }}>
+                    <div style={{ ...s.bebas, fontSize: 30, textTransform: 'uppercase', marginBottom: '0.75rem', color: '#ffffff' }}>{step.title}</div>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: '#ffffff', lineHeight: 1.75, fontWeight: 300, maxWidth: 380 }}>{step.body}</p>
                   </div>
                   <div style={{ padding: '2.5rem 3rem', display: 'flex', alignItems: 'center' }}>
-                    <motion.span
-                      whileHover={{ color: '#e84030', borderColor: '#e84030' }}
-                      style={{ ...s.mono, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', border: '0.5px solid rgba(237,232,225,0.12)', padding: '0.4rem 1rem', color: 'rgba(237,232,225,0.35)', transition: 'all 0.2s', cursor: 'none' }}
-                    >{step.tag}</motion.span>
+                    <Link to={step.to} style={{ textDecoration: 'none' }}>
+                      <motion.span
+                        whileHover={{ color: '#e84030', borderColor: '#e84030' }}
+                        style={{ ...s.mono, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', border: '0.5px solid rgba(255,255,255,0.4)', padding: '0.4rem 1rem', color: '#ffffff', transition: 'all 0.2s', cursor: 'none' }}
+                      >{step.tag}</motion.span>
+                    </Link>
                   </div>
                 </div>
               </SlideIn>
@@ -464,12 +468,12 @@ export default function Landing() {
         </section>
 
         {/* ── PREVIEW ── */}
-        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(237,232,225,0.07)' }}>
+        <section style={{ padding: '8rem 3rem', borderTop: '0.5px solid rgba(255,255,255,0.15)' }}>
           <ScaleIn style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,80px)', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: '1rem' }}>See it<br />in action.</div>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: 'rgba(237,232,225,0.35)', fontWeight: 300 }}>A glimpse of what's inside — clean, intentional, built to help you focus.</p>
+            <div style={{ ...s.bebas, fontSize: 'clamp(48px,6vw,80px)', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: '1rem', color: '#ffffff' }}>See it<br />in action.</div>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: '#ffffff', fontWeight: 300 }}>A glimpse of what's inside — clean, intentional, built to help you focus.</p>
           </ScaleIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(237,232,225,0.07)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,0.15)' }}>
             {[
               {
                 label: '⚡ Daily Nutrition', title: 'Today\'s macros',
@@ -493,22 +497,22 @@ export default function Landing() {
                   style={{ background: '#0e0e0e', padding: '2rem', cursor: 'none', height: '100%' }}
                 >
                   <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#e84030', marginBottom: '1rem' }}>{card.label}</div>
-                  <div style={{ ...s.bebas, fontSize: 22, textTransform: 'uppercase', marginBottom: '0.5rem' }}>{card.title}</div>
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: 'rgba(237,232,225,0.35)', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.5rem' }}>{card.body}</p>
+                  <div style={{ ...s.bebas, fontSize: 22, textTransform: 'uppercase', marginBottom: '0.5rem', color: '#ffffff' }}>{card.title}</div>
+                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#ffffff', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.5rem' }}>{card.body}</p>
                   {card.bars && card.bars.map((b, bi) => (
                     <ProgressBar key={bi} label={b.label} value={b.value} delay={bi * 0.15} />
                   ))}
                   {card.chart && (
                     <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 60, marginTop: '0.5rem' }}>
                       {card.chart.map((h, ci) => (
-                        <div key={ci} style={{ flex: 1, background: 'rgba(237,232,225,0.06)', height: `${h}%`, borderTop: `1px solid ${ci === card.chart.length - 1 ? '#e84030' : 'rgba(200,56,42,0.5)'}` }} />
+                        <div key={ci} style={{ flex: 1, background: 'rgba(255,255,255,0.15)', height: `${h}%`, borderTop: `1px solid ${ci === card.chart.length - 1 ? '#e84030' : 'rgba(200,56,42,0.8)'}` }} />
                       ))}
                     </div>
                   )}
                   {card.pills && (
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginTop: '1rem' }}>
                       {card.pills.map((p, pi) => (
-                        <div key={pi} style={{ border: `0.5px solid ${pi === card.pills.length - 1 ? '#e84030' : 'rgba(237,232,225,0.07)'}`, padding: '0.5rem 0.75rem', fontSize: 10, color: pi === card.pills.length - 1 ? '#e84030' : 'rgba(237,232,225,0.35)' }}>{p}</div>
+                        <div key={pi} style={{ border: `0.5px solid ${pi === card.pills.length - 1 ? '#e84030' : 'rgba(255,255,255,0.15)'}`, padding: '0.5rem 0.75rem', fontSize: 10, color: pi === card.pills.length - 1 ? '#e84030' : '#ffffff' }}>{p}</div>
                       ))}
                     </div>
                   )}
@@ -519,13 +523,13 @@ export default function Landing() {
         </section>
 
         {/* ── CTA ── */}
-        <section style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8rem 3rem', borderTop: '0.5px solid rgba(237,232,225,0.07)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <section style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8rem 3rem', borderTop: '0.5px solid rgba(255,255,255,0.15)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
           {[300, 500, 700].map((size, i) => (
             <motion.div
               key={i}
               animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.15, 0.5] }}
               transition={{ duration: 4, delay: i * 1.3, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ position: 'absolute', width: size, height: size, left: '50%', top: '50%', marginLeft: -size / 2, marginTop: -size / 2, border: '0.5px solid rgba(200,56,42,0.2)', borderRadius: '50%', pointerEvents: 'none' }}
+              style={{ position: 'absolute', width: size, height: size, left: '50%', top: '50%', marginLeft: -size / 2, marginTop: -size / 2, border: '0.5px solid rgba(200,56,42,0.4)', borderRadius: '50%', pointerEvents: 'none' }}
             />
           ))}
           <ScaleIn>
@@ -533,12 +537,12 @@ export default function Landing() {
               <div style={{ width: 20, height: 0.5, background: '#e84030' }} />
               ready when you are
             </div>
-            <div style={{ ...s.bebas, fontSize: 'clamp(64px,10vw,140px)', lineHeight: 0.88, textTransform: 'uppercase', marginBottom: '2.5rem' }}>
-              <div style={{ WebkitTextStroke: '1.5px rgba(237,232,225,0.13)', color: 'transparent' }}>Start</div>
-              <div style={{ WebkitTextStroke: '1.5px rgba(237,232,225,0.1)', color: 'transparent' }}>training</div>
+            <div style={{ ...s.bebas, fontSize: 'clamp(64px,10vw,140px)', lineHeight: 0.88, textTransform: 'uppercase', marginBottom: '2.5rem', color: '#ffffff' }}>
+              <div>Start</div>
+              <div>training</div>
               <div style={{ color: '#e84030' }}>right.</div>
             </div>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: 'rgba(237,232,225,0.35)', maxWidth: 380, margin: '0 auto 3rem', lineHeight: 1.8, fontWeight: 300 }}>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: '#ffffff', maxWidth: 380, margin: '0 auto 3rem', lineHeight: 1.8, fontWeight: 300 }}>
               No excuses. No myths. No wasted months. Just you, the right knowledge, and a plan that actually works.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
@@ -549,8 +553,8 @@ export default function Landing() {
                 </motion.button>
               </Link>
               <Link to="/guides">
-                <motion.button whileHover={{ borderColor: 'rgba(237,232,225,0.25)', color: '#ede8e1' }}
-                  style={{ ...s.mono, background: 'transparent', color: 'rgba(237,232,225,0.35)', border: '0.5px solid rgba(237,232,225,0.08)', padding: '1rem 2rem', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.2s' }}>
+                <motion.button whileHover={{ borderColor: 'rgba(255,255,255,0.6)', color: '#ffffff' }}
+                  style={{ ...s.mono, background: 'transparent', color: '#ffffff', border: '0.5px solid rgba(255,255,255,0.4)', padding: '1rem 2rem', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.2s' }}>
                   Explore guides
                 </motion.button>
               </Link>
@@ -558,9 +562,11 @@ export default function Landing() {
           </ScaleIn>
         </section>
 
-        <footer style={{ borderTop: '0.5px solid rgba(237,232,225,0.07)', padding: '2rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ ...s.bebas, fontSize: 16 }}>Fit<span style={{ color: '#e84030' }}>Right</span></div>
-          <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(237,232,225,0.15)' }}>© 2026 FitRight — Know Your Craft</div>
+        <footer style={{ borderTop: '0.5px solid rgba(255,255,255,0.15)', padding: '2rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div style={{ ...s.bebas, fontSize: 16, color: '#ffffff' }}>Fit<span style={{ color: '#e84030' }}>Right</span></div>
+          </Link>
+          <div style={{ ...s.mono, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#ffffff' }}>© 2026 FitRight — Know Your Craft</div>
         </footer>
       </div>
 

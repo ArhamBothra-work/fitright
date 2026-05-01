@@ -29,3 +29,51 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// --- NEW PROFILE UPDATE FUNCTION ---
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, email, currentPassword, newPassword, goal } = req.body;
+    
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // ONLY validate current password if the user is attempting to change their password
+    if (newPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({ message: 'Current password is required to set a new password' });
+      }
+      
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Incorrect current password' });
+      }
+
+      // Hash the new password
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    // Update the other fields freely without needing currentPassword
+    if (name) user.name = name;
+    if (goal) user.goal = goal;
+
+    // Handle email change (and check for duplicates)
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) return res.status(400).json({ message: 'Email is already in use' });
+      user.email = email;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      user: { id: user._id, name: user.name, email: user.email, goal: user.goal }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Add crypto at the top if it's not already there
+const crypto = require('crypto');

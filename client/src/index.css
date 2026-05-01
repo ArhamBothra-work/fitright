@@ -4,10 +4,11 @@
   --acc: #e63030;
   --acc-rgb: 230, 48, 48;
   --bg: #080808;
-  --fg: #f0ede8;
-  --fg-muted: rgba(240, 237, 232, 0.35);
-  --fg-dim: rgba(240, 237, 232, 0.15);
-  --border: rgba(255, 255, 255, 0.06);
+  /* Brighter foreground values */
+  --fg: #ffffff;
+  --fg-muted: rgba(255, 255, 255, 0.75);
+  --fg-dim: rgba(255, 255, 255, 0.45);
+  --border: rgba(255, 255, 255, 0.12);
 }
 
 * {
@@ -56,7 +57,6 @@ button {
   color: var(--fg);
 }
 
-/* fix transparent stroked text */
 [style*="color: transparent"] {
   color: #ffffff !important;
   -webkit-text-stroke: 0px !important;

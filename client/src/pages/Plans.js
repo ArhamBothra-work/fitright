@@ -6,54 +6,125 @@ import axios from 'axios';
 const API = 'https://fitright-server.onrender.com/api';
 const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
+// Precise anatomical target mappings for Front and Back sides
 const musclePositions = {
-  chest:      { x: 200, y: 120, front: true },
-  shoulders:  { x: 160, y: 100, front: true },
-  biceps:     { x: 145, y: 145, front: true },
-  core:       { x: 200, y: 180, front: true },
-  quads:      { x: 185, y: 270, front: true },
-  triceps:    { x: 255, y: 145, front: false },
-  back:       { x: 200, y: 130, front: false },
-  hamstrings: { x: 200, y: 280, front: false },
-  glutes:     { x: 200, y: 230, front: false },
-  calves:     { x: 200, y: 340, front: false },
+  // Front Muscles
+  chest:      { front: true },
+  shoulders:  { front: true },
+  biceps:     { front: true },
+  core:       { front: true },
+  quads:      { front: true },
+  adductors:  { front: true },
+
+  // Back Muscles
+  back:       { front: false },
+  lats:       { front: false },
+  triceps:    { front: false },
+  hamstrings: { front: false },
+  glutes:     { front: false },
+  calves:     { front: false },
+  abductors:  { front: false },
+  traps:      { front: false },
 };
 
 function BodyDiagram({ activeMuscles }) {
-  const showFront = activeMuscles.length === 0 || activeMuscles.some(m => musclePositions[m]?.front);
+  // Calculate which side to show based on the hovered muscles
+  const showFront = activeMuscles.length === 0 || activeMuscles.some(m => {
+    const key = m.toLowerCase();
+    return musclePositions[key]?.front || (!musclePositions[key] && !['back', 'lats', 'glutes', 'hamstrings', 'calves', 'triceps', 'abductors', 'traps'].includes(key));
+  });
+
+  const isActive = (muscleName) => {
+    return activeMuscles.some(m => m.toLowerCase().includes(muscleName.toLowerCase()));
+  };
+
+  const activeColor = 'var(--acc)';
+  const inactiveColor = '#121212';
+  const strokeColor = 'rgba(240,237,232,0.12)';
+
   return (
     <div style={{ position: 'sticky', top: '2rem' }}>
       <div style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--fg-dim)', marginBottom: '1rem', textAlign: 'center' }}>
         {activeMuscles.length ? (showFront ? 'Front' : 'Back') : 'Hover an exercise'} — muscles targeted
       </div>
-      <svg viewBox="0 0 400 420" style={{ width: '100%', maxWidth: 280, display: 'block', margin: '0 auto' }}>
-        <g fill="none" stroke="rgba(240,237,232,0.1)" strokeWidth="1.5">
-          <ellipse cx="200" cy="55" rx="35" ry="42" />
-          <line x1="200" y1="97" x2="200" y2="210" />
-          <path d="M200 105 Q155 115 140 180 Q148 185 160 175 Q165 140 200 130" />
-          <path d="M200 105 Q245 115 260 180 Q252 185 240 175 Q235 140 200 130" />
-          <path d="M160 175 Q150 210 155 240 Q165 238 168 210" />
-          <path d="M240 175 Q250 210 245 240 Q235 238 232 210" />
-          <path d="M200 130 Q175 135 168 210 Q185 215 200 212 Q215 215 232 210 Q225 135 200 130" />
-          <path d="M168 212 Q170 280 172 310 Q185 312 188 280 Q192 260 200 255 Q208 260 212 280 Q215 312 228 310 Q230 280 232 212" />
-          <path d="M172 310 Q170 360 175 380 Q188 382 190 360 Q192 340 193 310" />
-          <path d="M228 310 Q230 360 225 380 Q212 382 210 360 Q208 340 207 310" />
-        </g>
-        {activeMuscles.map(muscle => {
-          const pos = musclePositions[muscle];
-          if (!pos || pos.front !== showFront) return null;
-          return (
-            <g key={muscle}>
-              <circle cx={pos.x} cy={pos.y} r="22" fill="rgba(230,48,48,0.25)" stroke="var(--acc)" strokeWidth="1.5" />
-              <circle cx={pos.x} cy={pos.y} r="8" fill="var(--acc)" opacity="0.8" />
-              <text x={pos.x} y={pos.y + 38} textAnchor="middle" fill="rgba(240,237,232,0.5)" fontSize="10" fontFamily="Inter">{muscle}</text>
-            </g>
-          );
-        })}
-        {activeMuscles.length === 0 && Object.entries(musclePositions).filter(([, p]) => p.front === showFront).map(([m, pos]) => (
-          <circle key={m} cx={pos.x} cy={pos.y} r="14" fill="rgba(240,237,232,0.03)" stroke="rgba(240,237,232,0.08)" strokeWidth="1" />
-        ))}
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 200 420"
+        style={{ width: '100%', height: 'auto', background: '#0a0a0a', borderRadius: '12px', border: '1px solid var(--border)', padding: '1rem', display: 'block', margin: '0 auto' }}
+      >
+        {/* Render Front Side Muscles */}
+        {showFront && (
+          <g id="front-anatomy">
+            {/* Traps (Anterior) */}
+            <path d="M78 68 C80 50, 92 48, 92 48 L92 68 Z" fill={isActive('traps') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M122 68 C120 50, 108 48, 108 48 L108 68 Z" fill={isActive('traps') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Shoulders / Delts */}
+            <path d="M68 68 C55 80, 60 100, 64 110 L76 78 Z" fill={isActive('shoulders') || isActive('deltoids') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M132 68 C145 80, 140 100, 136 110 L124 78 Z" fill={isActive('shoulders') || isActive('deltoids') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Chest / Pectorals */}
+            <path d="M78 74 C78 74, 90 74, 96 78 L96 108 C80 108, 76 96, 76 96 Z" fill={isActive('chest') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M122 74 C122 74, 110 74, 104 78 L104 108 C120 108, 124 96, 124 96 Z" fill={isActive('chest') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Biceps */}
+            <path d="M60 112 C55 125, 55 140, 62 152 L68 120 Z" fill={isActive('biceps') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M140 112 C145 125, 145 140, 138 152 L132 120 Z" fill={isActive('biceps') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Forearms */}
+            <path d="M58 156 C52 170, 50 190, 56 205 L64 165 Z" fill={isActive('forearms') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M142 156 C148 170, 150 190, 144 205 L136 165 Z" fill={isActive('forearms') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Abs / Core */}
+            <rect x="84" y="112" width="32" height="60" rx="4" fill={isActive('core') || isActive('abs') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Quads (Thighs) */}
+            <path d="M72 195 C72 195, 68 250, 78 285 L94 285 C94 285, 96 220, 92 195 Z" fill={isActive('quads') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M128 195 C128 195, 132 250, 122 285 L106 285 C106 285, 104 220, 108 195 Z" fill={isActive('quads') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Adductors (Inner Thigh) */}
+            <path d="M88 198 L94 270 L86 270 Z" fill={isActive('adductors') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M112 198 L106 270 L114 270 Z" fill={isActive('adductors') ? activeColor : inactiveColor} stroke={strokeColor} />
+          </g>
+        )}
+
+        {/* Render Posterior (Back) Side Muscles */}
+        {!showFront && (
+          <g id="back-anatomy">
+            {/* Neck / Traps (Back) */}
+            <path d="M82 48 C90 35, 110 35, 118 48 L108 78 L92 78 Z" fill={isActive('traps') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Upper Back & Lats */}
+            <path d="M76 82 C65 95, 62 135, 84 145 L94 110 Z" fill={isActive('back') || isActive('lats') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M124 82 C135 95, 138 135, 116 145 L106 110 Z" fill={isActive('back') || isActive('lats') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Lower Back */}
+            <rect x="88" y="145" width="24" height="35" rx="2" fill={isActive('lower back') || isActive('back') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Triceps */}
+            <path d="M64 105 C55 120, 55 138, 65 152 L70 120 Z" fill={isActive('triceps') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M136 105 C145 120, 145 138, 135 152 L130 120 Z" fill={isActive('triceps') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Glutes */}
+            <path d="M72 182 C72 170, 98 170, 98 185 L96 215 C82 215, 72 205, 72 182 Z" fill={isActive('glutes') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M128 182 C128 170, 102 170, 102 185 L104 215 C118 215, 128 205, 128 182 Z" fill={isActive('glutes') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Hamstrings */}
+            <path d="M74 218 C72 245, 74 275, 84 288 L96 288 L96 218 Z" fill={isActive('hamstrings') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M126 218 C128 245, 126 275, 116 288 L104 288 L104 218 Z" fill={isActive('hamstrings') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Calves */}
+            <path d="M76 295 C70 315, 70 345, 84 365 L90 365 L88 295 Z" fill={isActive('calves') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M124 295 C130 315, 130 345, 116 365 L110 365 L112 295 Z" fill={isActive('calves') ? activeColor : inactiveColor} stroke={strokeColor} />
+
+            {/* Abductors (Lateral Hips) */}
+            <path d="M68 182 C64 195, 66 208, 72 215 L72 182 Z" fill={isActive('abductors') ? activeColor : inactiveColor} stroke={strokeColor} />
+            <path d="M132 182 C136 195, 134 208, 128 215 L128 182 Z" fill={isActive('abductors') ? activeColor : inactiveColor} stroke={strokeColor} />
+          </g>
+        )}
       </svg>
+
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '1rem', justifyContent: 'center' }}>
         {activeMuscles.map(m => (
           <span key={m} style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'rgba(230,48,48,0.1)', border: '0.5px solid var(--acc)', color: 'var(--acc)', padding: '0.2rem 0.6rem' }}>{m}</span>
@@ -138,7 +209,7 @@ export default function Plans() {
         </div>
       ) : (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
-          style={{ display: 'grid', gridTemplateColumns: '1fr 300px' }}>
+          style={{ display: 'grid', gridTemplateColumns: '1fr 320px' }}>
           <div style={{ borderRight: '0.5px solid var(--border)' }}>
             <div style={{ padding: '1.5rem 2.5rem', borderBottom: '0.5px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
@@ -182,7 +253,7 @@ export default function Plans() {
             ))}
           </div>
 
-          <div style={{ padding: '2rem' }}>
+          <div style={{ padding: '2rem 1.5rem' }}>
             <BodyDiagram activeMuscles={hoveredMuscles} />
           </div>
         </motion.div>
