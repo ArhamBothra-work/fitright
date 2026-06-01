@@ -96,6 +96,3 @@ This project provided hands-on experience with:
 * Social and community features
 * Mobile application support
 * Enhanced progress reporting and insights
-
-```
-```
